@@ -10,7 +10,8 @@ import org.telegram.telegrambots.meta.generics.TelegramClient;
 
 @Service
 public class TelegramService implements LongPollingSingleThreadUpdateConsumer {
-    TelegramClient telegramClient = new OkHttpTelegramClient("6563408491:AAGRIvjmdIL_jqJ7QyEroCGeJQlJiFIo9eE");
+    static String botToken = "6563408491:AAGRIvjmdIL_jqJ7QyEroCGeJQlJiFIo9eE";
+    TelegramClient telegramClient = new OkHttpTelegramClient(botToken);
 
     @Override
     public void consume(Update update) {
