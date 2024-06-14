@@ -8,6 +8,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 @SpringBootApplication
 public class TelegaEchoApplication {
     public static void main(String[] args) {
+
         try {
             String botToken = "6563408491:AAGRIvjmdIL_jqJ7QyEroCGeJQlJiFIo9eE";
             TelegramBotsLongPollingApplication botsApplication = new TelegramBotsLongPollingApplication();
