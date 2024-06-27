@@ -4,11 +4,21 @@ import java.sql.*;
 
 public class StatService {
     private int romanWins, kirillWins = 0;
+    private double percentageRoman, percentageKirill = 0;
     static String url = "jdbc:postgresql://localhost:5432/billiard";
     static String user = "masterrezki";
     static String password = "masterrezki";
 
+    private void clearStatistics() {
+        romanWins = 0;
+        kirillWins = 0;
+        percentageRoman = 0.0;
+        percentageKirill = 0.0;
+    }
+
     public String collectionStatistics() {
+        clearStatistics();
+
         try (Connection conn = DriverManager.getConnection(url, user, password)) {
             PreparedStatement ps1 = conn.prepareStatement("select sum(roman) as Roman, sum(kirill) as Kirill from billiards;");
             ResultSet rs1 = ps1.executeQuery();
@@ -18,6 +28,13 @@ public class StatService {
                 kirillWins = rs1.getInt("Kirill");
             }
 
+            int sum = romanWins + kirillWins;
+            if (sum != 0) {
+                percentageRoman = ((double) romanWins / sum) * 100;
+                percentageKirill = ((double) kirillWins / sum) * 100;
+            }
+
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -26,31 +43,8 @@ public class StatService {
     }
 
     private String getAdditionalInfo() {
-        return "Количество победных партий Романа: " + romanWins + "\n" + "Количество победных партий Кирилла: " + kirillWins;
+        return "Количество победных партий Романа: " + romanWins + " (" + String.format("%.1f", percentageRoman) + " %)" + "\n"
+                + "Количество победных партий Кирилла: " + kirillWins + " (" + String.format("%.1f", percentageKirill) + " %)";
     }
-
-//    private void updateDatabase() {
-//        try (Connection conn = DriverManager.getConnection(url, user, password)) {
-//            //String updateQuery = "UPDATE sys_extras SET value = ? WHERE key = ?";
-//            String updateQuery = "INSERT INTO billiards(data, roman, kirill) VALUES (?, ?, ?);";
-//
-//            PreparedStatement preparedStatement = conn.prepareStatement(updateQuery);
-//
-//            updateFieldValue(preparedStatement, "daught", daught2);
-//            updateFieldValue(preparedStatement, "single", single2);
-//            updateFieldValue(preparedStatement, "franch", franch2);
-//            updateFieldValue(preparedStatement, "evotor", evotor2);
-//
-//            System.out.println("Счет добавлен");
-//        } catch (SQLException e) {
-//            System.out.println("SQL exception: " + e.getMessage());
-//        }
-//    }
-//
-//    private void updateFieldValue(PreparedStatement preparedStatement, String data, int roman, int kirill) throws SQLException {
-//        preparedStatement.setString(1, data);
-//        preparedStatement.setInt(2, roman);
-//        preparedStatement.setInt(2, kirill);
-//        preparedStatement.executeUpdate();
-//    }
 }
+

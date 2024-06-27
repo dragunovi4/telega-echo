@@ -31,6 +31,8 @@ public class TelegramService implements LongPollingSingleThreadUpdateConsumer {
                     message.setReplyMarkup(createKeyboard());
                 } else if (receivedText.equals("Статистика")) {
                     message = new SendMessage(chatId, statService.collectionStatistics());
+                } else if (receivedText.equals("Ввести новый счет")) {
+                    message = new SendMessage(chatId, statService.collectionStatistics());
                 }
                 telegramClient.execute(message);
             } catch (TelegramApiException e) {
@@ -49,9 +51,13 @@ public class TelegramService implements LongPollingSingleThreadUpdateConsumer {
         KeyboardRow row1 = new KeyboardRow();
         row1.add(new KeyboardButton("Статистика"));
 
+        KeyboardRow row2 = new KeyboardRow();
+        row2.add(new KeyboardButton("Ввести новый счет"));
+
         // Добавление кнопок на клавиатуру
         List<KeyboardRow> keyboard = new ArrayList<>();
         keyboard.add(row1);
+        keyboard.add(row2);
 
         keyboardMarkup.setKeyboard(keyboard);
 
